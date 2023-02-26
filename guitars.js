@@ -28,31 +28,57 @@ const client = new GoogleImages(
 
 //remove duplicates
 
-Guitar.aggregate([
-  {
-    $group: {
-      _id: "$model",
-      uniqueIds: { $addToSet: "$_id" },
-      count: { $sum: 1 },
-    },
-  },
-  { $match: { count: { $gt: 1 } } },
-])
-  .then((result) => {
-    result.forEach((group) => {
-      group.uniqueIds.shift(); // keep the first document
-      Guitar.deleteMany({ _id: { $in: group.uniqueIds } })
-        .then((res) => {
-          console.log(`${res.deletedCount} documents deleted`);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// Guitar.aggregate([
+//   {
+//     $group: {
+//       _id: "$model",
+//       uniqueIds: { $addToSet: "$_id" },
+//       count: { $sum: 1 },
+//     },
+//   },
+//   { $match: { count: { $gt: 1 } } },
+// ])
+//   .then((result) => {
+//     result.forEach((group) => {
+//       group.uniqueIds.shift(); // keep the first document
+//       Guitar.deleteMany({ _id: { $in: group.uniqueIds } })
+//         .then((res) => {
+//           console.log(`${res.deletedCount} documents deleted`);
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//         });
+//     });
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+// Set up Google Custom Search client
+const { google } = require("googleapis");
+const customsearch = google.customsearch("v1");
+
+// // Perform Google Custom Search with site restriction and make/model query
+// const query = `${Guitar.make} ${Guitar.model}`;
+// customsearch.cse
+//   .list({
+//     auth: process.env.GOOGLE_API_KEY,
+//     cx: process.env.GOOGLE_CSE_ID,
+//     q: query,
+//     siteSearch: "https://www.sweetwater.com/",
+//   })
+//   .then((response) => {
+//     // Update the guitar document's img field with the first image URL
+//     Guitar.img = response.data.items[0].link;
+
+//     console.log(
+//       "Remaining queries:",
+//       response.data.searchInformation.queries.remainingQuota
+//     );
+//   })
+//   .catch((err) => {
+//     console.error("Error searching for images:", err);
+//   });
 
 //set view engine add views to path
 app.set("view engine", ejs);
@@ -70,25 +96,59 @@ app.get("/", (req, res) => {
   });
 });
 
+// // Retrieve all documents from the database
+// Guitar.find()
+//   .then(guitars => {
+//     // Iterate through each guitar document
+//     guitars.forEach((guitar, index) => {
+//       // Perform Google image search with make and model
+//       const query = `${guitar.make} ${guitar.model}`;
+//       setTimeout(() => {
+//         client.search(query)
+//           .then(images => {
+//             // Update the guitar document's img field with the first image URL
+//             guitar.img = images[0].url;
+//             guitar.save();
+//             console.log('Remaining queries:', images.quotaRemaining);
+//           })
+//           .catch(err => console.error('Error searching for images:', err));
+//       }, index * 2000); // Add a delay of 1 second for each iteration
+//     });
+//   })
+//   .catch(err => console.error('Error retrieving guitars:', err));
+
+
 // Retrieve all documents from the database
 Guitar.find()
-  .then(guitars => {
+  .then((guitars) => {
     // Iterate through each guitar document
     guitars.forEach((guitar, index) => {
-      // Perform Google image search with make and model
+      // Perform Google Custom Search with site restriction and make/model query
       const query = `${guitar.make} ${guitar.model}`;
       setTimeout(() => {
-        client.search(query)
-          .then(images => {
-            // Update the guitar document's img field with the first image URL
-            guitar.img = images[0].url;
-            guitar.save();
+        customsearch.cse
+          .list({
+            auth: process.env.GOOGLE_API_KEY,
+            cx: process.env.GOOGLE_CSE_ID,
+            q: query,
+            siteSearch: "https://www.sweetwater.com/",
           })
-          .catch(err => console.error('Error searching for images:', err));
-      }, index * 2000); // Add a delay of 1 second for each iteration
+          .then((response) => {
+            // Update the guitar document's img field with the first image URL
+            guitar.img = response.data.items[0].link;
+            console.log(guitar.img)
+            guitar.save();
+
+
+          })
+          .catch((err) => {
+            console.error("Error searching for images:", err);
+          });
+      }, index * 2000); // Add a delay of 2 seconds for each iteration
     });
   })
-  .catch(err => console.error('Error retrieving guitars:', err));
+  .catch((err) => console.error("Error retrieving guitars:", err));
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");

@@ -10,7 +10,7 @@
   <body>
     <ul>
       <% for( let i = 0; i < guitars.length; i++ ) { %>
-      <li><%= guitars[i].make %> <%= guitars[i].model %></li>
+      <li><%= guitars[i].make %> <%= guitars[i].model %><img src="<%= guitars[i].img %>"></li>
       <% } %>
     </ul>
   </body>
