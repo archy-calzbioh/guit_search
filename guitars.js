@@ -26,7 +26,7 @@ const client = new GoogleImages(
 //   .then(() => console.log("Guitars inserted successfully!"))
 //   .catch((err) => console.error(err));
 
-//remove duplicates
+// remove duplicates
 
 // Guitar.aggregate([
 //   {
@@ -58,27 +58,6 @@ const client = new GoogleImages(
 const { google } = require("googleapis");
 const customsearch = google.customsearch("v1");
 
-// Perform Google Custom Search with site restriction and make/model query
-const query = `${Guitar.make} ${Guitar.model}`;
-customsearch.cse
-  .list({
-    auth: process.env.GOOGLE_API_KEY,
-    cx: process.env.GOOGLE_CSE_ID,
-    q: query,
-    siteSearch: "https://www.sweetwater.com/",
-  })
-  .then((response) => {
-    // Update the guitar document's img field with the first image URL
-    Guitar.img = response.data.items[0].link;
-
-    console.log(
-      "Remaining queries:",
-      response.data.searchInformation.queries.remainingQuota
-    );
-  })
-  .catch((err) => {
-    console.error("Error searching for images:", err);
-  });
 
 //set view engine add views to path
 app.set("view engine", ejs);
@@ -109,7 +88,7 @@ Guitar.find()
             // Update the guitar document's img field with the first image URL
             guitar.img = images[0].url;
             guitar.save();
-            console.log('Remaining queries:', images.quotaRemaining);
+            console.log(guitar.img);
           })
           .catch(err => console.error('Error searching for images:', err));
       }, index * 2000); // Add a delay of 1 second for each iteration

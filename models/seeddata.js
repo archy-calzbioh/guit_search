@@ -24,13 +24,13 @@ const guitars = [
   { make: "Jackson", model: "JS22-7 DKA HT", price: 300, type: "electric" },
   { make: "Guild", model: "D-240E", price: 500, type: "acoustic" },
   { make: "ESP", model: "LTD EC-1000", price: 900, type: "electric" },
-  { make: "Blueridge", model: "BR-160", price: 1200, type: "acoustic" },
+  
   { make: "Epiphone", model: "SG Standard", price: 500, type: "electric" },
   { make: "Fender", model: "CD-60SCE", price: 350, type: "acoustic" },
   { make: "G&L", model: "Legacy", price: 1700, type: "electric" },
   { make: "Yamaha", model: "APX600", price: 300, type: "acoustic" },
   { make: "D'Angelico", model: "Premier SS", price: 1000, type: "electric" },
-  { make: "Takamine", model: "GN93CE-NAT", price: 650, type: "acoustic" },
+
   { make: "Epiphone", model: "ES-339", price: 600, type: "electric" },
   { make: "Fender", model: "Stratocaster", price: 1500, type: "electric" },
   { make: "Gibson", model: "Les Paul", price: 2000, type: "electric" },
