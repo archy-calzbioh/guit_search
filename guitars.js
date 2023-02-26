@@ -14,6 +14,23 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
+//set view engine add views to path
+app.set("view engine", ejs);
+app.set("views", path.join(__dirname, "views"));
+//set static 
+app.use(express.static('public'))
+//render guitars make and model
+app.get("/", (req, res) => {
+  Guitar.find({}, (err, docs) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("index.ejs", { guitars: docs });
+    }
+  });
+});
+
+
 // Set up Google Images client
 const client = new GoogleImages(
   process.env.GOOGLE_CSE_ID,
@@ -59,21 +76,6 @@ const { google } = require("googleapis");
 const customsearch = google.customsearch("v1");
 
 
-//set view engine add views to path
-app.set("view engine", ejs);
-app.set("views", path.join(__dirname, "views"));
-//set static 
-app.use(express.static('public'))
-//render guitars make and model
-app.get("/", (req, res) => {
-  Guitar.find({}, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("index.ejs", { guitars: docs });
-    }
-  });
-});
 
 // Retrieve all documents from the database
 Guitar.find()

@@ -76,7 +76,7 @@ const guitars = [
   { make: "PRS", model: "CE 24", price: 2000, type: "electric" },
   { make: "Alvarez", model: "AD60", price: 500, type: "acoustic" },
   { make: "Gibson", model: "Les Paul Custom", price: 3000, type: "electric" },
-  { make: "Fender", model: "Jazzmaster", price: 1800, type: "electric" },
+
   { make: "Martin", model: "OM-28", price: 4000, type: "acoustic" },
   { make: "Ibanez", model: "SR500", price: 700, type: "electric" },
   { make: "Taylor", model: "524ce", price: 2800, type: "acoustic" },
@@ -84,7 +84,7 @@ const guitars = [
   { make: "Gretsch", model: "G6136T Falcon", price: 4000, type: "electric" },
   { make: "Guild", model: "M-20", price: 1200, type: "acoustic" },
   { make: "PRS", model: "S2 Custom 22", price: 1500, type: "electric" },
-  { make: "Alvarez", model: "PD80S", price: 1000, type: "acoustic" },
+
 ];
 
 module.exports = guitars
