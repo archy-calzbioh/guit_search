@@ -7,6 +7,7 @@ const guitarSchema = new mongoose.Schema({
   model: { type: String, required: true },
   price: { type: Number, required: true },
   type: { type: String, enum: ["acoustic", "electric"], required: true },
+  img: { type: String, required: false },
 });
 
 //create model

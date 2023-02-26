@@ -6,12 +6,20 @@ const Guitar = require("/Users/zacharybolich/guitarshop/models/schema.js");
 const guitars = require("/Users/zacharybolich/guitarshop/models/seeddata.js");
 const app = express();
 const path = require("path");
+const GoogleImages = require("google-images");
 require("dotenv").config();
 // Connect to the MongoDB database
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+// Set up Google Images client
+const client = new GoogleImages(
+  process.env.GOOGLE_CSE_ID,
+  process.env.GOOGLE_API_KEY
+);
+
 
 // // Insert the guitars into the database
 // Guitar.insertMany(guitars)
@@ -61,6 +69,26 @@ app.get("/", (req, res) => {
     }
   });
 });
+
+// Retrieve all documents from the database
+Guitar.find()
+  .then(guitars => {
+    // Iterate through each guitar document
+    guitars.forEach((guitar, index) => {
+      // Perform Google image search with make and model
+      const query = `${guitar.make} ${guitar.model}`;
+      setTimeout(() => {
+        client.search(query)
+          .then(images => {
+            // Update the guitar document's img field with the first image URL
+            guitar.img = images[0].url;
+            guitar.save();
+          })
+          .catch(err => console.error('Error searching for images:', err));
+      }, index * 2000); // Add a delay of 1 second for each iteration
+    });
+  })
+  .catch(err => console.error('Error retrieving guitars:', err));
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
