@@ -17,6 +17,7 @@
     "google": "^2.1.0",
     "google-images": "^2.1.0",
     "googleapis": "^111.0.0",
+    "jquery": "^3.6.3",
     "mongoose": "^6.10.0",
     "node": "^19.6.1",
     "path": "^0.12.7"

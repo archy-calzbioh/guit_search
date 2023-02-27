@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
@@ -20,7 +20,7 @@
       <% for (let i = 0; i < guitars.length; i += 4) { %>
       <tr>
         <% for (let j = 0; j < 4 && i + j < guitars.length; j++) { %>
-        <td class="animate__bounceIn">
+        <td class="animate__bounceIn box">
           <p><%= guitars[i+j].make %> <%= guitars[i+j].model %></p>
           <img class="guitar-image" src="<%= guitars[i+j].img %>" />
         </td>
@@ -29,4 +29,5 @@
       <% } %>
     </table>
   </body>
+  <script src="/jquery.js"></script>
 </html>
