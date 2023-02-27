@@ -7,6 +7,18 @@ const guitars = require("./models/seeddata.js");
 const app = express();
 const path = require("path");
 const GoogleImages = require("google-images");
+
+// Set up Google Custom Search client
+const { google } = require("googleapis");
+const customsearch = google.customsearch("v1");
+// Set up Google Images client
+const client = new GoogleImages(
+  process.env.GOOGLE_CSE_ID,
+  process.env.GOOGLE_API_KEY
+);
+
+
+
 require("dotenv").config();
 // Connect to the MongoDB database
 mongoose.connect(process.env.MONGODB_URI, {
@@ -31,19 +43,14 @@ app.get("/", (req, res) => {
 });
 
 
-// Set up Google Images client
-const client = new GoogleImages(
-  process.env.GOOGLE_CSE_ID,
-  process.env.GOOGLE_API_KEY
-);
 
 
-// // Insert the guitars into the database
+// //First, Insert the guitars into the database
 // Guitar.insertMany(guitars)
 //   .then(() => console.log("Guitars inserted successfully!"))
 //   .catch((err) => console.error(err));
 
-// remove duplicates
+// Then remove duplicates
 
 // Guitar.aggregate([
 //   {
@@ -71,13 +78,9 @@ const client = new GoogleImages(
 //     console.log(err);
 //   });
 
-// Set up Google Custom Search client
-const { google } = require("googleapis");
-const customsearch = google.customsearch("v1");
 
 
-
-// // Retrieve all documents from the database
+// // Finally google images for db entries. Comment out the seed and this function so it //doesnt query forever
 // Guitar.find()
 //   .then(guitars => {
 //     // Iterate through each guitar document
