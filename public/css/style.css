@@ -34,3 +34,11 @@ img.guitar-image{
     transform: scale(1);
   }
 }
+
+ table {
+        width: 100%;
+      }
+
+#viewImg{
+    width: 300px;
+}

@@ -31,8 +31,14 @@ app.set("view engine", ejs);
 app.set("views", path.join(__dirname, "views"));
 //set static 
 app.use(express.static('public'))
-//render guitars make and model
+
+//redirect from /
 app.get("/", (req, res) => {
+  res.redirect("/resources");
+});
+
+//Lists all instances of guitar. Index route
+app.get("/resources", (req, res) => {
   Guitar.find({}, (err, docs) => {
     if (err) {
       console.log(err);
@@ -42,6 +48,19 @@ app.get("/", (req, res) => {
   });
 });
 
+//create show route
+app.get("/resources/:id", (req, res) =>{
+  Guitar.findById(req.params.id).lean().exec((err, foundGuitar)=> {
+  if(err){
+    console.log(err)
+  }else{
+    
+    delete foundGuitar.__v;
+    delete foundGuitar._id;
+    res.render("show.ejs", {guitar: foundGuitar})
+  }
+})
+})
 
 
 
