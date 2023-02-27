@@ -8,6 +8,7 @@ const app = express();
 const path = require("path");
 const GoogleImages = require("google-images");
 
+require("dotenv").config();
 // Set up Google Custom Search client
 const { google } = require("googleapis");
 const customsearch = google.customsearch("v1");
@@ -19,7 +20,6 @@ const client = new GoogleImages(
 
 
 
-require("dotenv").config();
 // Connect to the MongoDB database
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
