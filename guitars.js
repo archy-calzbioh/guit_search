@@ -2,8 +2,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const ejs = require("ejs");
-const Guitar = require("/Users/zacharybolich/guitarshop/models/schema.js");
-const guitars = require("/Users/zacharybolich/guitarshop/models/seeddata.js");
+const Guitar = require("./models/schema.js");
+const guitars = require("./models/seeddata.js");
 const app = express();
 const path = require("path");
 const GoogleImages = require("google-images");
@@ -77,26 +77,26 @@ const customsearch = google.customsearch("v1");
 
 
 
-// Retrieve all documents from the database
-Guitar.find()
-  .then(guitars => {
-    // Iterate through each guitar document
-    guitars.forEach((guitar, index) => {
-      // Perform Google image search with make and model
-      const query = `${guitar.make} ${guitar.model}`;
-      setTimeout(() => {
-        client.search(query)
-          .then(images => {
-            // Update the guitar document's img field with the first image URL
-            guitar.img = images[0].url;
-            guitar.save();
-            console.log(guitar.img);
-          })
-          .catch(err => console.error('Error searching for images:', err));
-      }, index * 2000); // Add a delay of 1 second for each iteration
-    });
-  })
-  .catch(err => console.error('Error retrieving guitars:', err));
+// // Retrieve all documents from the database
+// Guitar.find()
+//   .then(guitars => {
+//     // Iterate through each guitar document
+//     guitars.forEach((guitar, index) => {
+//       // Perform Google image search with make and model
+//       const query = `${guitar.make} ${guitar.model}`;
+//       setTimeout(() => {
+//         client.search(query)
+//           .then(images => {
+//             // Update the guitar document's img field with the first image URL
+//             guitar.img = images[0].url;
+//             guitar.save();
+//             console.log(guitar.img);
+//           })
+//           .catch(err => console.error('Error searching for images:', err));
+//       }, index * 2000); // Add a delay of 1 second for each iteration
+//     });
+//   })
+//   .catch(err => console.error('Error retrieving guitars:', err));
 
 
 app.listen(3000, () => {
