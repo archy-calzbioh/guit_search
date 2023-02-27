@@ -6,10 +6,10 @@ Image data is inserted into database programmatically with Google API and Google
 
 Views are generated dynamically with ejs. 
 
-Database is hosted at MongoDB Atlas. 
+Database: MongoDB Atlas. 
 
 Hover behavior with jQuery and CSS
 
-Bounce on page load from the animate.css librart
+Bounce on page load from the animate.css library
 
 Live app hosted at https://guit-search.onrender.com/
