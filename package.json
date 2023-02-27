@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "animate.css": "^4.1.1",
     "apis": "^0.1.2",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
