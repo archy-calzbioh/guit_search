@@ -132,31 +132,12 @@ app.get("/resources/:id", (req, res) =>{
 //   })
 //   .catch(err => console.error('Error retrieving guitars:', err));
 
-// make a cart 
-app.get('/add-to-wishlist/:id', function(req, res){
-  var itemId = req.params.id;
-  var cart = req.session.cart || {};
-
-  //check if item is already in cart
-  if (cart[itemId]){
-    cart[itemId].qty++;
-
-  }else{
-    Guitar.findById(itemId, function(err, item){
-      if (err) return res.status(500).send('Error finding item');
-      if (!item) return res.status(404).send('Item not found');
-      cart[itemId] = {
-        item: item,
-        qty: 1
-      }
-    })
-  }
-
-  req.session.cart = cart;
-  res.redirect('/wishlist.ejs')
-})
-
-
+//wishlist route
+app.get("/wishlist", (req, res) => {
+  const wishlist = req.cookies.wishlist;
+  res.render("wishlist.ejs", { wishlist: wishlist });
+});
+ 
 //add-to-wishlist route
 app.get("/add-to-wishlist/:id", (req, res) => {
   const itemId = req.params.id;
@@ -181,7 +162,7 @@ app.get("/add-to-wishlist/:id", (req, res) => {
   res.cookie("wishlist", req.cookies.wishlist);
 
   // Redirect back to the show view
-  res.redirect(`/resources/${itemId}`);
+  res.redirect(`/wishlist`);
 });
 
 
