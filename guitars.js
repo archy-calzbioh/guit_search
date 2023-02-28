@@ -133,36 +133,54 @@ app.get("/resources/:id", (req, res) =>{
 //   .catch(err => console.error('Error retrieving guitars:', err));
 
 //wishlist route
-app.get("/wishlist", (req, res) => {
+app.get("/wishlist", async (req, res) => {
   const wishlist = req.cookies.wishlist;
-  res.render("wishlist.ejs", { wishlist: wishlist });
+  const guitarIds = wishlist.map((item) => item.id);
+
+  try {
+    const guitars = await Guitar.find({ _id: { $in: guitarIds } }).lean();
+    res.render("wishlist.ejs", { wishlist: wishlist, guitars: guitars });
+  } catch (err) {
+    console.log(err);
+    res.send("Error retrieving guitars from database.");
+  }
 });
- 
 //add-to-wishlist route
-app.get("/add-to-wishlist/:id", (req, res) => {
+app.get("/add-to-wishlist/:id", async (req, res) => {
   const itemId = req.params.id;
 
-  // Check if the item is already in the wishlist
-  const itemIndex = req.cookies.wishlist.findIndex(
-    (item) => item.id === itemId
-  );
-  if (itemIndex !== -1) {
-    // Increment the quantity of the item in the wishlist
-    req.cookies.wishlist[itemIndex].quantity += 1;
-  } else {
-    // Add the item to the wishlist
-    const item = {
-      id: itemId,
-      quantity: 1,
-    };
-    req.cookies.wishlist.push(item);
+  try {
+    const guitar = await Guitar.findById(itemId).lean();
+    if (!guitar) {
+      res.status(404).send("Guitar not found");
+      return;
+    }
+
+    const itemIndex = req.cookies.wishlist.findIndex(
+      (item) => item.id === itemId
+    );
+    if (itemIndex !== -1) {
+      req.cookies.wishlist[itemIndex].quantity += 1;
+    } else {
+      const item = {
+        id: itemId,
+        quantity: 1,
+        price: guitar.price,
+      };
+      req.cookies.wishlist.push(item);
+    }
+    res.cookie("wishlist", req.cookies.wishlist);
+    res.redirect(`/wishlist`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
   }
+});
 
-  // Set the updated wishlist in the cookie
-  res.cookie("wishlist", req.cookies.wishlist);
-
-  // Redirect back to the show view
-  res.redirect(`/wishlist`);
+//empty wishlist 
+app.get("/empty-wishlist", (req, res) => {
+  res.cookie("wishlist", []);
+  res.redirect("/wishlist");
 });
 
 
