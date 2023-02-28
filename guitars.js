@@ -259,6 +259,17 @@ app.put("/resources/:id", (req, res) => {
   );
 });
 
+//delete route
+app.delete("/resources/:id", (req, res) => {
+  Guitar.findByIdAndRemove(req.params.id, (err, doc) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error deleting guitar");
+    } else {
+      res.redirect("/resources");
+    }
+  });
+});
 
 
 app.listen(3000, () => {
