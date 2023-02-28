@@ -9,6 +9,7 @@ const path = require("path");
 const GoogleImages = require("google-images");
 const ejsLint = import("ejs-lint");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser")
 
 //set view engine add views to path
 app.set("view engine", ejs);
@@ -28,6 +29,12 @@ const client = new GoogleImages(
 
 // Add cookie-parser middleware
 app.use(cookieParser());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 //initilize cookie middleware
 app.use((req, res, next) => {
@@ -191,13 +198,16 @@ app.get("/empty-wishlist", (req, res) => {
 
 //post route add a guitar
 app.post("/resources", (req, res) => {
+  console.log("Req body: ", req.body); // Add this line
   const guitar = new Guitar({
     make: req.body.make,
     model: req.body.model,
     price: req.body.price,
     img: req.body.img,
+    type: req.body.type
   });
 
+  console.log("New guitar: ", guitar); // Add this line
   guitar.save((err, doc) => {
     if (err) {
       console.log(err);
