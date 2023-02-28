@@ -120,6 +120,30 @@ app.get("/resources/:id", (req, res) =>{
 //   })
 //   .catch(err => console.error('Error retrieving guitars:', err));
 
+// make a cart 
+app.get('/add-to-wishlist/:id', function(req, res){
+  var itemId = req.params.id;
+  var cart = req.session.cart || {};
+
+  //check if item is already in cart
+  if (cart[itemId]){
+    cart[itemId].qty++;
+
+  }else{
+    Guitar.findById(itemId, function(err, item){
+      if (err) return res.status(500).send('Error finding item');
+      if (!item) return res.status(404).send('Item not found');
+      cart[itemId] = {
+        item: item,
+        qty: 1
+      }
+    })
+  }
+
+  req.session.cart = cart;
+  res.redirect('/wishlist.ejs')
+})
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");

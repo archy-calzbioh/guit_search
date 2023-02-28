@@ -22,12 +22,14 @@
     </tr>
     <% for(var prop in guitar) { %>
 <tr>
-    <% if (prop != "img") { %>
+    <% if (prop != "img" && prop != "_id" && prop != "__v") { %>
     <td><%= prop %></td>
     <td><%=guitar[prop]%></td>
     <% } %>
 </tr>
     <%}%>
 </table>
+<a href="/add-to-wishlist/<%= guitar._id %>">Add to wishlist</a>
   
 </html>
+
