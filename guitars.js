@@ -1,12 +1,21 @@
 // Import the required modules
 const mongoose = require("mongoose");
 const express = require("express");
-const ejs = require("ejs");
+const ejs = require("ejs").__express;
 const Guitar = require("./models/schema.js");
 const guitars = require("./models/seeddata.js");
 const app = express();
 const path = require("path");
 const GoogleImages = require("google-images");
+const ejsLint = import("ejs-lint");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser")
+
+//set view engine add views to path
+app.set("view engine", ejs);
+app.set("views", path.join(__dirname, "views"));
+//set static 
+app.use(express.static('public'))
 
 require("dotenv").config();
 // Set up Google Custom Search client
@@ -18,6 +27,27 @@ const client = new GoogleImages(
   process.env.GOOGLE_API_KEY
 );
 
+// Add cookie-parser middleware
+app.use(cookieParser());
+
+//method over ride post to put middleware
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+//initilize cookie middleware
+app.use((req, res, next) => {
+  if (!req.cookies.wishlist) {
+    res.cookie("wishlist", []);
+  }
+  next();
+});
 
 
 // Connect to the MongoDB database
@@ -26,18 +56,14 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-//set view engine add views to path
-app.set("view engine", ejs);
-app.set("views", path.join(__dirname, "views"));
-//set static 
-app.use(express.static('public'))
+
 
 //redirect from /
 app.get("/", (req, res) => {
   res.redirect("/resources");
 });
 
-//Lists all instances of guitar. Index route
+//Lists all instances of guitar. Index/ read route
 app.get("/resources", (req, res) => {
   Guitar.find({}, (err, docs) => {
     if (err) {
@@ -55,14 +81,29 @@ app.get("/resources/:id", (req, res) =>{
     console.log(err)
   }else{
     
-    delete foundGuitar.__v;
-    delete foundGuitar._id;
+   
     res.render("show.ejs", {guitar: foundGuitar})
   }
 })
 })
 
+//new route
+app.get("/new", (req, res) => {
+  res.render("new.ejs");
+});
 
+
+//update route
+app.get("/update/:id", (req, res) => {
+  Guitar.findById(req.params.id, (err, foundGuitar) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retrieving guitar");
+    } else {
+      res.render("update.ejs", { guitar: foundGuitar });
+    }
+  });
+});
 
 // //First, Insert the guitars into the database
 // Guitar.insertMany(guitars)
@@ -119,6 +160,116 @@ app.get("/resources/:id", (req, res) =>{
 //     });
 //   })
 //   .catch(err => console.error('Error retrieving guitars:', err));
+
+//wishlist route
+app.get("/wishlist", async (req, res) => {
+  const wishlist = req.cookies.wishlist;
+  const guitarIds = wishlist.map((item) => item.id);
+
+  try {
+    const guitars = await Guitar.find({ _id: { $in: guitarIds } }).lean();
+    res.render("wishlist.ejs", { wishlist: wishlist, guitars: guitars });
+  } catch (err) {
+    console.log(err);
+    res.send("Error retrieving guitars from database.");
+  }
+});
+//add-to-wishlist route
+app.get("/add-to-wishlist/:id", async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const guitar = await Guitar.findById(itemId).lean();
+    if (!guitar) {
+      res.status(404).send("Guitar not found");
+      return;
+    }
+
+    const itemIndex = req.cookies.wishlist.findIndex(
+      (item) => item.id === itemId
+    );
+    if (itemIndex !== -1) {
+      req.cookies.wishlist[itemIndex].quantity += 1;
+    } else {
+      const item = {
+        id: itemId,
+        quantity: 1,
+        price: guitar.price,
+      };
+      req.cookies.wishlist.push(item);
+    }
+    res.cookie("wishlist", req.cookies.wishlist);
+    res.redirect(`/wishlist`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+//empty wishlist 
+app.get("/empty-wishlist", (req, res) => {
+  res.cookie("wishlist", []);
+  res.redirect("/wishlist");
+});
+
+
+
+//post route add a guitar: create
+app.post("/resources", (req, res) => {
+  console.log("Req body: ", req.body); // Add this line
+  const guitar = new Guitar({
+    make: req.body.make,
+    model: req.body.model,
+    price: req.body.price,
+    img: req.body.img,
+    type: req.body.type
+  });
+
+  console.log("New guitar: ", guitar); // Add this line
+  guitar.save((err, doc) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error creating guitar");
+    } else {
+      res.redirect("/resources");
+    }
+  });
+});
+
+
+//update route 
+app.put("/resources/:id", (req, res) => {
+  Guitar.findByIdAndUpdate(
+    req.params.id,
+    {
+      make: req.body.make,
+      model: req.body.model,
+      price: req.body.price,
+      img: req.body.img,
+      type: req.body.type
+    },
+    (err, doc) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating guitar");
+      } else {
+        res.redirect("/resources");
+      }
+    }
+  );
+});
+
+//delete route
+app.delete("/resources/:id", (req, res) => {
+  Guitar.findByIdAndRemove(req.params.id, (err, doc) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error deleting guitar");
+    } else {
+      res.redirect("/resources");
+    }
+  });
+});
 
 
 app.listen(3000, () => {

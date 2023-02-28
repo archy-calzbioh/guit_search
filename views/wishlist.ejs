@@ -14,25 +14,25 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <title>Document</title>
+    <title>Wishlist</title>
   </head>
   <body>
-    <table>
-      <% for (let i = 0; i < guitars.length; i += 4) { %>
-      <tr>
-        <% for (let j = 0; j < 4 && i + j < guitars.length; j++) { %>
-        <td class="animate__bounceIn box">
-          <p><%= guitars[i+j].make %> <%= guitars[i+j].model %></p><a href ="/resources/<%=guitars[i].id%>"> <img class="guitar-image" src="<%= guitars[i+j].img %>" /></a>
-         
-        </td>
-        <% } %>
-      </tr>
-      <% } %>
-    </table>
-    COTD:<div id="result"></div>
-    <a href="/new">Add an entry.</a>
+    <h1>Wishlist</h1>
+    <% wishlist.forEach(function(item) { %>
+      <div>
+        <h2><%= item.name %></h2>
+        <p>Price: $<%= item.price %></p>
+        <p>Quantity: <%= item.quantity %></p>
+        <% guitars.forEach(function(guitar) { %>
+          <% if (guitar._id.toString() === item.id) { %>
+            <img src="<%= guitar.img %>" width="200" />
+           <p><%= guitar.make %> <%= guitar.model %></p> 
+          <% } %>
+        <% }); %>
+      </div>
+    <% }); %>
+    <a href ="/empty-wishlist">Empty Wishlist</a>
+    <a href ="/">Back to Home</a>
   </body>
-  <script src="/jquery.js"></script>
-  
 </html>
+
