@@ -13,3 +13,6 @@ Hover behavior with jQuery and CSS
 Bounce on page load from the animate.css library
 
 Live app hosted at https://guit-search.onrender.com/
+
+
+Issues: aggregate causes errors if left to run indefinitely and the CSE runs whenever the server starts causing unnecessary API calls. 
