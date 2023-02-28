@@ -1,7 +1,7 @@
 // Import the required modules
 const mongoose = require("mongoose");
 const express = require("express");
-const ejs = require("ejs");
+const ejs = require("ejs").__express;
 const Guitar = require("./models/schema.js");
 const guitars = require("./models/seeddata.js");
 const app = express();
@@ -10,6 +10,11 @@ const GoogleImages = require("google-images");
 const ejsLint = import("ejs-lint");
 const cookieParser = require("cookie-parser");
 
+//set view engine add views to path
+app.set("view engine", ejs);
+app.set("views", path.join(__dirname, "views"));
+//set static 
+app.use(express.static('public'))
 
 require("dotenv").config();
 // Set up Google Custom Search client
@@ -39,11 +44,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-//set view engine add views to path
-app.set("view engine", ejs);
-app.set("views", path.join(__dirname, "views"));
-//set static 
-app.use(express.static('public'))
+
 
 //redirect from /
 app.get("/", (req, res) => {
@@ -74,7 +75,10 @@ app.get("/resources/:id", (req, res) =>{
 })
 })
 
-
+//new route
+app.get("/new", (req, res) => {
+  res.render("new.ejs");
+});
 
 // //First, Insert the guitars into the database
 // Guitar.insertMany(guitars)
@@ -182,6 +186,29 @@ app.get("/empty-wishlist", (req, res) => {
   res.cookie("wishlist", []);
   res.redirect("/wishlist");
 });
+
+
+
+//post route add a guitar
+app.post("/resources", (req, res) => {
+  const guitar = new Guitar({
+    make: req.body.make,
+    model: req.body.model,
+    price: req.body.price,
+    img: req.body.img,
+  });
+
+  guitar.save((err, doc) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error creating guitar");
+    } else {
+      res.redirect("/resources");
+    }
+  });
+});
+
+
 
 
 app.listen(3000, () => {
