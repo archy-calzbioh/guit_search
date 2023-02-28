@@ -30,6 +30,11 @@ const client = new GoogleImages(
 // Add cookie-parser middleware
 app.use(cookieParser());
 
+//method over ride post to put middleware
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -58,7 +63,7 @@ app.get("/", (req, res) => {
   res.redirect("/resources");
 });
 
-//Lists all instances of guitar. Index route
+//Lists all instances of guitar. Index/ read route
 app.get("/resources", (req, res) => {
   Guitar.find({}, (err, docs) => {
     if (err) {
@@ -85,6 +90,19 @@ app.get("/resources/:id", (req, res) =>{
 //new route
 app.get("/new", (req, res) => {
   res.render("new.ejs");
+});
+
+
+//update route
+app.get("/update/:id", (req, res) => {
+  Guitar.findById(req.params.id, (err, foundGuitar) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retrieving guitar");
+    } else {
+      res.render("update.ejs", { guitar: foundGuitar });
+    }
+  });
 });
 
 // //First, Insert the guitars into the database
@@ -196,7 +214,7 @@ app.get("/empty-wishlist", (req, res) => {
 
 
 
-//post route add a guitar
+//post route add a guitar: create
 app.post("/resources", (req, res) => {
   console.log("Req body: ", req.body); // Add this line
   const guitar = new Guitar({
@@ -218,6 +236,28 @@ app.post("/resources", (req, res) => {
   });
 });
 
+
+//update route 
+app.put("/resources/:id", (req, res) => {
+  Guitar.findByIdAndUpdate(
+    req.params.id,
+    {
+      make: req.body.make,
+      model: req.body.model,
+      price: req.body.price,
+      img: req.body.img,
+      type: req.body.type
+    },
+    (err, doc) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating guitar");
+      } else {
+        res.redirect("/resources");
+      }
+    }
+  );
+});
 
 
 
