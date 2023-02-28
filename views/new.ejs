@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>New Guitar</title>
-</head>
-<body>
-  <h1>New Guitar</h1>
-  <form action="/resources" method="POST">
-    <label for="make">Make:</label>
-    <input type="text" name="make" required>
-
-    <label for="model">Model:</label>
-    <input type="text" name="model" required>
-
-    <label for="price">Price:</label>
-    <input type="number" name="price" required>
-
-    <label for="img">Image URL:</label>
-    <input type="url" name="img" required>
-
-    <button type="submit">Submit</button>
-  </form>
-</body>
+  <head>
+    <title>New Guitar</title>
+  </head>
+  <body>
+    <h1>New Guitar</h1>
+    <form action="/resources" method="POST">
+      <table>
+        <tr>
+          <td><label for="make">Make:</label></td>
+          <td><input type="text" name="make" required /></td>
+        </tr>
+        <tr>
+          <td><label for="model">Model:</label></td>
+          <td><input type="text" name="model" required /></td>
+        </tr>
+        <tr>
+          <td><label for="price">Price:</label></td>
+          <td><input type="number" name="price" required /></td>
+        </tr>
+        <tr>
+          <td><label for="type">Type:</label></td>
+          <td>
+            <input type="radio" name="type" id="acoustic" value="acoustic" checked />
+            <label for="acoustic">Acoustic</label>
+            <input type="radio" name="type" id="electric" value="electric" />
+            <label for="electric">Electric</label>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="img">Image URL:</label></td>
+          <td><input type="url" name="img" required /></td>
+        </tr>
+      </table>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
 </html>
