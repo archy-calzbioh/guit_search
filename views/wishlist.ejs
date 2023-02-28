@@ -8,14 +8,14 @@
   </head>
   <body>
     <h1>Wishlist</h1>
-    <% Object.keys(cart).forEach(function(itemId) { %> <% var item =
-    cart[itemId].item; %>
+    <% items.forEach(function(item) { %>
     <div>
-      <h2><%= item.name %></h2>
-      <p>Price: $<%=item.price%></p>
-      <p>Quantity: <%= cart[itemId].qty %></p>
+      <h2><%= item.item.name %></h2>
+      <p>Price: $<%= item.item.price %></p>
+      <p>Quantity: <%= item.qty %></p>
     </div>
 
     <% });%>
+    
   </body>
 </html>

@@ -7,6 +7,9 @@ const guitars = require("./models/seeddata.js");
 const app = express();
 const path = require("path");
 const GoogleImages = require("google-images");
+const ejsLint = import("ejs-lint");
+const cookieParser = require("cookie-parser");
+
 
 require("dotenv").config();
 // Set up Google Custom Search client
@@ -18,6 +21,16 @@ const client = new GoogleImages(
   process.env.GOOGLE_API_KEY
 );
 
+// Add cookie-parser middleware
+app.use(cookieParser());
+
+//initilize cookie middleware
+app.use((req, res, next) => {
+  if (!req.cookies.wishlist) {
+    res.cookie("wishlist", []);
+  }
+  next();
+});
 
 
 // Connect to the MongoDB database
@@ -55,8 +68,7 @@ app.get("/resources/:id", (req, res) =>{
     console.log(err)
   }else{
     
-    delete foundGuitar.__v;
-    delete foundGuitar._id;
+   
     res.render("show.ejs", {guitar: foundGuitar})
   }
 })
@@ -143,6 +155,34 @@ app.get('/add-to-wishlist/:id', function(req, res){
   req.session.cart = cart;
   res.redirect('/wishlist.ejs')
 })
+
+
+//add-to-wishlist route
+app.get("/add-to-wishlist/:id", (req, res) => {
+  const itemId = req.params.id;
+
+  // Check if the item is already in the wishlist
+  const itemIndex = req.cookies.wishlist.findIndex(
+    (item) => item.id === itemId
+  );
+  if (itemIndex !== -1) {
+    // Increment the quantity of the item in the wishlist
+    req.cookies.wishlist[itemIndex].quantity += 1;
+  } else {
+    // Add the item to the wishlist
+    const item = {
+      id: itemId,
+      quantity: 1,
+    };
+    req.cookies.wishlist.push(item);
+  }
+
+  // Set the updated wishlist in the cookie
+  res.cookie("wishlist", req.cookies.wishlist);
+
+  // Redirect back to the show view
+  res.redirect(`/resources/${itemId}`);
+});
 
 
 app.listen(3000, () => {
