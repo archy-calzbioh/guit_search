@@ -10,6 +10,8 @@ Database: MongoDB Atlas.
 
 Hover behavior with jQuery and CSS
 
+CSS based on water.css
+
 Bounce on page load from the animate.css library
 
 Live app hosted at https://guit-search.onrender.com/
