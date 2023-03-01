@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>Wishlist</title>
-  </head>
+<%- include('./partials/head.ejs') %>
   <body>
     <h1>Wishlist</h1>
+    <header><%- include('./partials/header.ejs') %></header>
     <% wishlist.forEach(function(item) { %>
-      <div>
-        <h2><%= item.name %></h2>
-        <p>Price: $<%= item.price %></p>
-        <p>Quantity: <%= item.quantity %></p>
-        <% guitars.forEach(function(guitar) { %>
-          <% if (guitar._id.toString() === item.id) { %>
-            <img src="<%= guitar.img %>" width="200" />
-           <p><%= guitar.make %> <%= guitar.model %></p> 
-          <% } %>
-        <% }); %>
-      </div>
+    <div>
+      <h2><%= item.name %></h2>
+      <p>Price: $<%= item.price %></p>
+      <p>Quantity: <%= item.quantity %></p>
+      <% guitars.forEach(function(guitar) { %> <% if (guitar._id.toString() ===
+      item.id) { %>
+      <img src="<%= guitar.img %>" width="200" />
+      <p><%= guitar.make %> <%= guitar.model %></p>
+      <% } %> <% }); %>
+    </div>
     <% }); %>
-    <a href ="/empty-wishlist">Empty Wishlist</a>
-    <a href ="/">Back to Home</a>
+    <a href="/empty-wishlist" class="btn btn-primary">Empty Wishlist</a>
+    <a href="/" class="btn btn-primary">Back to Home</a>
   </body>
 </html>
-

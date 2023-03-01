@@ -1,38 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <title>Document</title>
-  </head>
-  <body>
+    <%- include('./partials/head.ejs') %>
+
+    <body>
+    <div class="body-overlay">
+        <header>
+            <%- include('./partials/header.ejs') %>
+        </header>
+    <div>
     <table>
       <% for (let i = 0; i < guitars.length; i += 4) { %>
       <tr>
         <% for (let j = 0; j < 4 && i + j < guitars.length; j++) { %>
         <td class="animate__bounceIn box">
-          <p><%= guitars[i+j].make %> <%= guitars[i+j].model %></p><a href ="/resources/<%=guitars[i].id%>"> <img class="guitar-image" src="<%= guitars[i+j].img %>" /></a>
-         
+          <p><%= guitars[i+j].make %> <%= guitars[i+j].model %></p>
+          <a href="/resources/<%=guitars[i].id%>">
+            <img class="guitar-image" src="<%= guitars[i+j].img %>"
+          /></a>
         </td>
         <% } %>
       </tr>
       <% } %>
     </table>
-    COTD:<div id="result"></div>
-    <a href="/new">Add an entry.</a>
+    </div>
+    <a href="/new" class="btn btn-primary">Add a new entry</a>
   </body>
   <script src="/jquery.js"></script>
-  
 </html>

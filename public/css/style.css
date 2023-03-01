@@ -1,19 +1,25 @@
-li{
-    list-style: none;
+li {
+  list-style: none;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-img.guitar-image{
-    max-width: 100px;
+img.guitar-image {
+  max-width: 100px;
+  margin-top: 60px; /* or adjust this value as needed */
+  max-height: 100%;
+  border-style: solid;
+  border-color: black;
+  border-radius: 5px;
 }
 
 .box {
-  width: 100px;
+  width: 100%;
   height: 100px;
-
 }
 
 .box:hover {
-  animation: heartBeat 1s;
+  animation: heartBeat 4s;
   animation-iteration-count: infinite;
 }
 
@@ -35,10 +41,158 @@ img.guitar-image{
   }
 }
 
- table {
-        width: 100%;
-      }
+
+#generatorinator {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  position: fixed;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  top: 120px;
+  right: 50px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+  font-family: "Montserrat", sans-serif;
+  background-color: #fff;
+  color: #444;
+  background-repeat: no-repeat;
+}
+
+#generatorinator h1 {
+  background-image: url("https://media.istockphoto.com/id/901304018/photo/wooden-texture-background.jpg?s=170667a&w=0&k=20&c=gcMJGUprKYJmiywk2EY9JASqu_EpF7ib07TJ8aB35X0=");
+  justify-content: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  border-color: 2px rgb(122, 116, 108);
+}
+
+#generatorinator p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+}
+
+#generatorinator img {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 100%;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #fff;
+}
+
+nav {
+  background-color: #ffffff;
+  color: #444;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+  
+  nav h1 {
+	font-size: 5vw;
+	background-image: url("https://media.istockphoto.com/id/901304018/photo/wooden-texture-background.jpg?s=170667a&w=0&k=20&c=gcMJGUprKYJmiywk2EY9JASqu_EpF7ib07TJ8aB35X0=");
+	justify-content: center;
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	border-color: 2px rgb(255, 252, 248);
+  }
+  
+  nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+  }
+  
+  nav ul li {
+	margin: 0 10px;
+  }
+  
+  nav ul li a {
+	display: block;
+	padding: 10px;
+	color: #444;
+	text-decoration: none;
+	font-weight: 500;
+	letter-spacing: 1px;
+	background-color: #fff;
+  }
+  
+  nav ul li a:hover {
+	background-image: url("https://media.istockphoto.com/id/901304018/photo/wooden-texture-background.jpg?s=170667a&w=0&k=20&c=gcMJGUprKYJmiywk2EY9JASqu_EpF7ib07TJ8aB35X0=");
+	color:#ffffff
+  }
+ 
+
+
 
 #viewImg{
     width: 300px;
+}
+
+body {
+  margin-top: 100px;
+  color: black;
+}
+
+:root {
+  --water-primary: #fff;
+  --water-secondary: #fff;
+  --water-background: #fff;
+  --water-surface: #fff;
+  --water-light: #fff;
+  --water-dark: #fff;
+  --water-success: #fff;
+  --water-warning: #fff;
+  --water-error: #fff;
+  --water-info: #fff;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+table tr:nth-child(even) {
+  background-color: #fff;
+}
+
+
+.btn {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #444;
+}
+
+.btn {
+  display: inline-block;
+  margin-right: 10px;
 }
