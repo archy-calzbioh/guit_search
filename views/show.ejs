@@ -47,6 +47,7 @@
     <a href="/add-to-wishlist/<%= guitar._id %>" class="btn btn-primary">Add to Wishlist</a>
     <a href="/" class="btn btn-primary">Back</a>
     <a href="/update/<%=guitar._id%>" class="btn btn-primary">Edit</a>
+    <a href="/edit/<%=guitar._id%>" class="btn btn-primary">Post Method Update</a>
     <!-- Add a form with a DELETE method and a submit button -->
     <form action="/resources/<%= guitar._id %>?_method=DELETE" method="POST">
       <button type="submit" class="btn btn-danger">Delete</button>
