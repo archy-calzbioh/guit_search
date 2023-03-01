@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %>
+<h1>Edit Guitar</h1>
+<form method="POST" action="/resources/<%= guitar._id %>?_method=PATCH">
+  <div>
+    <label for="make">Make:</label>
+    <input type="text" name="make" value="<%= guitar.make %>">
+  </div>
+  <div>
+    <label for="model">Model:</label>
+    <input type="text" name="model" value="<%= guitar.model %>">
+  </div>
+  <div>
+    <label for="price">Price:</label>
+    <input type="text" name="price" value="<%= guitar.price %>">
+  </div>
+  <div>
+    <label for="img">Image URL:</label>
+    <input type="text" name="img" value="<%= guitar.img %>">
+  </div>
+  <div>
+    <label for="type">Type:</label>
+    <input type="text" name="type" value="<%= guitar.type %>">
+  </div>
+  <button type="submit">Post</button>
+</form>

@@ -271,6 +271,40 @@ app.delete("/resources/:id", (req, res) => {
   });
 });
 
+//patch route
+app.patch("/resources/:id", (req, res) => {
+  Guitar.findByIdAndUpdate(
+    req.params.id,
+    {
+      make: req.body.make,
+      model: req.body.model,
+      price: req.body.price,
+      img: req.body.img,
+      type: req.body.type
+    },
+    (err, doc) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating guitar");
+      } else {
+        res.redirect("/resources/" + req.params.id);
+      }
+    }
+  );
+});
+
+//render edit
+app.get("/edit/:id", (req, res) => {
+  Guitar.findById(req.params.id, (err, foundGuitar) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retrieving guitar");
+    } else {
+      res.render("edit.ejs", { guitar: foundGuitar });
+    }
+  });
+});
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
